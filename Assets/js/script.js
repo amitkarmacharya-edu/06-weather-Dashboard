@@ -53,11 +53,11 @@ function readFromStorage() {
   // check if there is saved data
   if (localStorage.getItem("searchHistory")) {
     // parse the data into javscript object then return it
-    forecastData = JSON.parse(localStorage.getItem("searchHistory"));
+    recentSearch = JSON.parse(localStorage.getItem("searchHistory"));
   } else {
     // debug
     console.log("There is data inside local storage");
-    forecastData = [];
+    recentSearch = [];
   }
 
 }
@@ -101,17 +101,45 @@ function getWeatherData() {
 
 }
 
-// get
-
 // display the data on the page
 function populate() {
 
     // display search history
     readFromStorage();
     $recentSearchUL.empty();
-    for(let i = 0; i < forecastData.length; i++) {
+    for(let i = 0; i < recentSearch.length; i++) {
         let $li = $('<li>').addClass('list-group-item list-city');
         $recentSearchUL.append($li);
     }
+
+    // display current weather
+    getWeatherData();
+    $('.cw-cityName').text(currentWeather.cityName);
+    $('.cw-date').text(currentWeather.date);
+    $('.weather-icon').attr('src', `http://openweathermap.org/img/wn/${currentWeather.icon}@2x.png`);
+    $('.weather-description').text(currentWeather.description);
+    $('.temperature').text(currentWeather.temp+" &deg;F");
+    $('.windSpeed').text(currentWeather.wind + " mph");
+    $('.humidity').text(currentWeather.humidity + " %");
+
+    // display forecast data
+    getForecastData();
+    $('.forecast').empty();
+    for(let i = 0; i < forecastData.length; i++) {
+
+        let day = forecastData[i];
+        let cardTemplate = `<!-- col -->
+                            <div class="col-md m-1 card text-white bg-info mb-3" style="max-width: 18rem;">
+                                <div class="card-header text-center">${day.date}</div>
+                                <div class="card-body">
+                                    <img class="d-block text-center" src="http://openweathermap.org/img/wn/${day.icon}@2x.png" alt="icon">
+                                    <p class="card-text mt-3">${day.temp + " &deg;F"}</p>
+                                    <p class="card-text">${day.humidity + " %"}</p>
+                                </div>
+                            </div>`;
+        $('.forecast').append(cardTemplate);
+    }
+
+
 
 }
