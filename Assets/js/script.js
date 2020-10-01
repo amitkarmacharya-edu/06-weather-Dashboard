@@ -14,6 +14,8 @@ var currentWeather = {};
 // current city name
 var currentCity = "baltimore" // by default;
 
+
+
 // check if storage is available
 function storageAvailable() {
   var storage;
@@ -298,13 +300,21 @@ $('.search-form').on("submit", function (event) {
   
   });
 
-  // event listener to the li elements, change the functionality to button
-  $('.city').on('click',function(event){
+// event listener to the li elements, change the functionality to button
+$('.recent-search-list').on('click',function(event){
 
-    // this
-    $this = $(this);
+    // this will capture ul so event.target will capture the element where user clicked
+    // in this case it will return the li element
+    $this = $(event.target);
 
     currentCity = $this.text();
 
     getWeatherData();
+
   });
+
+
+// initialize the page
+(function (){
+  getWeatherData();
+})();

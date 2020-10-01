@@ -1,0 +1,7 @@
+/* feedback to the user, behaviour changed to a button */
+.city:hover {
+    
+    cursor: pointer;
+    color: blue;
+    background-color: aquamarine;
+}
