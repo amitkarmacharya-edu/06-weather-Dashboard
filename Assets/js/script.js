@@ -113,7 +113,7 @@ function getWeatherData() {
     // asynchronus request for currentWeather
     $.ajax(URL).then(function (response) {
 
-        // console.log(response);
+        console.log(response);
 
       // save the date
       currentWeather["date"] = dateInString(response.dt);
@@ -130,7 +130,7 @@ function getWeatherData() {
       // save the wind speed
       currentWeather["wind"] = response.wind.speed;
       // save the weather description
-      currentWeather["description"] = response.weather.description;
+      currentWeather["description"] = response.weather[0].description;
       // save the weather icon
       currentWeather["icon"] = response.weather[0].icon;
 
@@ -232,7 +232,7 @@ function populate() {
     $('.cw-cityName').text(currentWeather.cityName);
     $('.cw-date').text(currentWeather.date);
     $('.weather-icon').attr('src', `http://openweathermap.org/img/wn/${currentWeather.icon}@2x.png`);
-    $('.weather-description').text(currentWeather.description);
+    $('.description').text(currentWeather.description);
     $('.temperature').html(currentWeather.temp + " &deg;F");
     $('.windSpeed').text(currentWeather.wind + " mph");
     $('.humidity').text(currentWeather.humidity + " %");

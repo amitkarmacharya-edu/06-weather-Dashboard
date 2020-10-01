@@ -5,3 +5,12 @@
     color: blue;
     background-color: aquamarine;
 }
+
+/* add media query to the ul , when the screen size is limit the size */
+
+@media screen and (max-width: 575px) {
+    .recent-search-list {
+        max-height: 15rem;
+        overflow: scroll;
+    }
+  }
