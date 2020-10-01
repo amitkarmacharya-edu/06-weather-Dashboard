@@ -15,7 +15,6 @@ var currentWeather = {};
 var currentCity = "baltimore" // by default;
 
 
-
 // check if storage is available
 function storageAvailable() {
   var storage;
