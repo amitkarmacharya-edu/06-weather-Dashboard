@@ -117,6 +117,8 @@ function getWeatherData() {
 
       // save the date
       currentWeather["date"] = dateInString(response.dt);
+      // save the day
+      currentWeather["day"] = DAYS[new Date(response.dt*1000).getDay()];
       // save the longitude
       currentWeather["lon"] = response.coord.lon;
       // save the latitude
@@ -230,30 +232,33 @@ function populate() {
 
     // display current weather
     $('.cw-cityName').text(currentWeather.cityName);
-    $('.cw-date').text(currentWeather.date);
+    $('.cw-date').text(currentWeather.date + " - " + currentWeather.day.toUpperCase());
     $('.weather-icon').attr('src', `http://openweathermap.org/img/wn/${currentWeather.icon}@2x.png`);
     $('.description').text(currentWeather.description);
     $('.temperature').html(currentWeather.temp + " &deg;F");
     $('.windSpeed').text(currentWeather.wind + " mph");
     $('.humidity').text(currentWeather.humidity + " %");
-    $('.uvIndex').text(currentWeather.UVIndex);
+    $('#uvindex').text(currentWeather.UVIndex);
     // check the color of UVIndex background
     // set the value of the color
-    let UVIndex = currentWeather.UVIndex;
+    let UVIndex = parseInt(currentWeather.UVIndex);
+    console.log(typeof UVIndex)
+    console.log(UVIndex);
     let cssClass;
-    if (UVIndex < 3) {
+    if(UVIndex <= 2) {
       cssClass = 'bg-success text-white';
-    } else if (UVIndex < 6) {
+    } else if (UVIndex >= 3 && UVIndex <= 5) {
       cssClass = 'yellow';
-    } else if (UVIndex < 8) {
+    } else if (UVIndex >= 6 && UVIndex <= 8) {
       cssClass = 'bg-warning text-white';
-    } else if (UVIndex < 11) {
+    } else if (UVIndex >= 9 && UVIndex <= 10) {
       cssClass = 'bg-danger text-white';
     } else {
       cssClass = 'purple';
     }
-    
-    $('.uvIndex').addClass(cssClass);
+
+    cssClass += ' p-1 rounded';
+    $('#uvindex').attr('class', cssClass);
     
     
 }
