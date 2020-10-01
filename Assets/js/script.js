@@ -103,7 +103,7 @@ function getWeatherData() {
     // request query string
     let queryString = `?q=${currentCity}&&APPID=${APPID}`;
     // query url
-    let queryUrl = "http://api.openweathermap.org/data/2.5/weather" + queryString;
+    let queryUrl = "https://api.openweathermap.org/data/2.5/weather" + queryString;
     // request url object for weather api endpoint
     let URL = {
       url: queryUrl,
@@ -137,7 +137,7 @@ function getWeatherData() {
       // query String for UVIndex
       queryString = `?units=imperial&lat=${currentWeather.lat}&lon=${currentWeather.lon}&appid=${APPID}`;
       // query Url for UVIndex
-      queryUrl = "http://api.openweathermap.org/data/2.5/uvi" + queryString;
+      queryUrl = "https://api.openweathermap.org/data/2.5/uvi" + queryString;
       // query object for UVIndex api endpoint
       URL["url"] = queryUrl;
   
@@ -167,7 +167,7 @@ function getForecastData() {
      // create a query string
   let queryString = `?q=${currentCity}&exclude=hourly&appid=${APPID}`;
   // create a query url
-  let queryUrl = "http://api.openweathermap.org/data/2.5/forecast" + queryString;
+  let queryUrl = "https://api.openweathermap.org/data/2.5/forecast" + queryString;
   
   // create url object
   let URL = {

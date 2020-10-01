@@ -73,11 +73,11 @@
                             <!-- col, weather-info-container -->
                             <div class="col-sm-8  mt-3">
                                 <!-- row, current weather -->
-                                <div class="row">
+                                <div class="row no-gutters">
                                     <!-- col, current weather -->
-                                    <div class="col p-2 bg-light border border-success roundedcurrent-weather text-center">
+                                    <div class="col bg-light border rounded border-success rounded current-weather text-center">
                                             <!-- heading container -->
-                                            <div class="">
+                                            <div class="bg-secondary p-3 text-white rounded">
                                                 <!-- City Name -->
                                                 <h3 class="cw-cityName"></h3>
                                                 <!-- date and time -->
@@ -93,11 +93,23 @@
                                             <!-- temp,wind,humidity container -->
                                             <div class="d-flex justify-content-center">
                                                 <!-- Wind speed -->
-                                                <span class="windSpeed p-2 bg-info m-1 text-white rounded"></span>
+                                                <p class="p-2 bg-info m-1 text-white rounded"> 
+                                                  <span class="bg-success">Temp</span>
+                                                  <span class="d-block windSpeed "></span>
+                                                </p>
+                                                
                                                 <!-- humidity -->
-                                                <span class="humidity p-2 bg-info m-1 text-white rounded"></span>
+                                                <p class="p-2 bg-info m-1 text-white rounded">
+                                                  <span>Humidity</span>
+                                                  <span class="d-block humidity "></span>
+                                                </p>
+                                                
                                                 <!-- UVIndex -->
-                                                <span class="uvIndex p-2 bg-info m-1 text-white rounded"></span>
+                                                <p class="p-2 bg-info m-1 text-white rounded">
+                                                  <span class="">UVIndex</span>
+                                                  <span class="d-block uvIndex"></span>
+                                                </p>
+                                                
                                             </div>
                                     </div>
                                 </div>
