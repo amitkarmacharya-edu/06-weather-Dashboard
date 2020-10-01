@@ -237,7 +237,25 @@ function populate() {
     $('.windSpeed').text(currentWeather.wind + " mph");
     $('.humidity').text(currentWeather.humidity + " %");
     $('.uvIndex').text(currentWeather.UVIndex);
-
+    // check the color of UVIndex background
+    // set the value of the color
+    let UVIndex = currentWeather.UVIndex;
+    let cssClass;
+    if (UVIndex < 3) {
+      cssClass = 'bg-success text-white';
+    } else if (UVIndex < 6) {
+      cssClass = 'yellow';
+    } else if (UVIndex < 8) {
+      cssClass = 'bg-warning text-white';
+    } else if (UVIndex < 11) {
+      cssClass = 'bg-danger text-white';
+    } else {
+      cssClass = 'purple';
+    }
+    
+    $('.uvIndex').addClass(cssClass);
+    
+    
 }
 
 // display forecast

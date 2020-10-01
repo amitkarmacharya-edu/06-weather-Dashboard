@@ -6,6 +6,16 @@
     background-color: aquamarine;
 }
 
+/* uvindex */
+.yellow {
+    background-color: yellow;
+    color: black;
+}
+.purple {
+    background-color: purple;
+    color: white;
+}
+
 /* add media query to the ul , when the screen size is limit the size */
 
 @media screen and (max-width: 575px) {
