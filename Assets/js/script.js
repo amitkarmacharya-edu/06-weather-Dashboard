@@ -93,7 +93,7 @@ if (!storageAvailable("localStorage")) {
 
   } else {
     // when there is no previously saved data
-    localStorage.setItem("searchHistory", JSON.stringify(currentCity));
+    localStorage.setItem("searchHistory", JSON.stringify([currentCity]));
   }
 }
 
