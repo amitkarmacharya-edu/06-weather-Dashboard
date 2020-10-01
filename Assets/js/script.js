@@ -265,15 +265,15 @@ function displayForecastData(){
   for(let i = 0; i < forecastData.length; i++) {
       let day = forecastData[i];
       let cardTemplate = `<!-- col -->
-                          <div class="col-md-3 m-1 card text-white mb-3" style="max-width: 18rem;">
+                          <div class="col-md-4 mx-auto m-1 card text-white mb-3" style="max-width: 18rem;">
                               <div class="card-header text-center bg-primary">
                                 <span>${day.date}</span>
                                 <span class="d-block">${day.day.toUpperCase()}</span>
                               </div>
                               <div class="card-body bg-info">
                                   <img class="" src="http://openweathermap.org/img/wn/${day.icon}@2x.png" alt="icon">
-                                  <p class="card-text mt-3">${day.temp} &deg;F</p>
-                                  <p class="card-text">${day.humidity + " %"}</p>
+                                  <p class="card-text mt-3">Temp: ${day.temp} &deg;F</p>
+                                  <p class="card-text">Humidity: ${day.humidity + " %"}</p>
                               </div>
                           </div>`;
       $('.forecast').append(cardTemplate);
