@@ -1,8 +1,10 @@
-// container ul for recent search
-$recentSearchUL = $('.recent-search-list');
 
 // store the api key
 const APPID = "e7cca708a4710838a2c48823212c8011";
+
+// DAYS of the week
+const DAYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
 // forecast data
 var forecastData = [];
 // recent search history
@@ -12,10 +14,8 @@ var currentWeather = {};
 // current city name
 var currentCity = "baltimore" // by default;
 
-
-
 // check if storage is available
-function storageAvailalbe() {
+function storageAvailable() {
   var storage;
   try {
     storage = window.localStorage; // window.localStorage
@@ -96,8 +96,121 @@ if (!storageAvailable("localStorage")) {
   }
 }
 
-// get curret Weather
+// get current Weather
 function getWeatherData() {
+
+    // request query string
+    let queryString = `?q=${currentCity}&&APPID=${APPID}`;
+    // query url
+    let queryUrl = "http://api.openweathermap.org/data/2.5/weather" + queryString;
+    // request url object for weather api endpoint
+    let URL = {
+      url: queryUrl,
+      methood: "GET",
+    };
+    
+    // asynchronus request for currentWeather
+    $.ajax(URL).then(function (response) {
+
+        // console.log(response);
+
+      // save the date
+      currentWeather["date"] = dateInString(response.dt);
+      // save the longitude
+      currentWeather["lon"] = response.coord.lon;
+      // save the latitude
+      currentWeather["lat"] = response.coord.lat;
+      // save the city name
+      currentWeather["cityName"] = response.name;
+      // save the  temperature information
+      currentWeather["temp"] = kelvinToFahrenheit(response.main.temp);
+      // save the humidity
+      currentWeather["humidity"] = response.main.humidity;
+      // save the wind speed
+      currentWeather["wind"] = response.wind.speed;
+      // save the weather description
+      currentWeather["description"] = response.weather.description;
+      // save the weather icon
+      currentWeather["icon"] = response.weather[0].icon;
+
+      // query String for UVIndex
+      queryString = `?units=imperial&lat=${currentWeather.lat}&lon=${currentWeather.lon}&appid=${APPID}`;
+      // query Url for UVIndex
+      queryUrl = "http://api.openweathermap.org/data/2.5/uvi" + queryString;
+      // query object for UVIndex api endpoint
+      URL["url"] = queryUrl;
+  
+      // asynchronus request for UVIndex
+      $.ajax(URL).then(function (response) {
+
+        // save the UVIndex value
+        currentWeather['UVIndex'] = response.value;
+
+        // since there was data for city name provided by the user, 
+        // we can save the city name to the search histody
+        saveToStorage();
+
+        // get forecast data for the city
+        getForecastData();
+
+        // render the data
+        populate();
+      });
+    });
+
+}
+
+// get forecast weather
+function getForecastData() {
+
+     // create a query string
+  let queryString = `?q=${currentCity}&exclude=hourly&appid=${APPID}`;
+  // create a query url
+  let queryUrl = "http://api.openweathermap.org/data/2.5/forecast" + queryString;
+  
+  // create url object
+  let URL = {
+    url: queryUrl,
+    method: 'GET'
+  };
+
+  // asynchoronus request
+  $.ajax(URL).then(function(response) {
+    
+    let list = {};
+
+    // for all the response
+    for(let i = 0; i < response.list.length; i++) {
+
+      // save the current list
+      let item = response.list[i];
+
+      // get the day of the week
+      let day = new Date(item.dt*1000).getDay();
+
+      // store the date
+      let temp = {
+        day: DAYS[day],
+        date: dateInString(item.dt),
+        icon: item.weather[0].icon,
+        temp: kelvinToFahrenheit(item.main.temp),
+        humidity: item.main.humidity
+      };
+
+      // check the day of the week and store data corroesponding to that in the same key as a list
+      list.hasOwnProperty(DAYS[day]) ? list[DAYS[day]].push(temp) : list[DAYS[day]] = [temp];
+
+      let keys = Object.keys(list);
+      forecastData = [];
+      // loop through all the keys
+      for(let i = 0; i < keys.length; i++) {
+        forecastData.push(list[keys[i]][0]);
+      }
+    }
+
+    // display the data
+    displayForecastData();
+  });
 
 }
 
@@ -106,40 +219,92 @@ function populate() {
 
     // display search history
     readFromStorage();
+    let $recentSearchUL = $('.recent-search-list');
     $recentSearchUL.empty();
     for(let i = 0; i < recentSearch.length; i++) {
-        let $li = $('<li>').addClass('list-group-item list-city');
+        let $li = $('<li>').addClass('list-group-item city');
+        $li.text(recentSearch[i]);
         $recentSearchUL.append($li);
     }
 
     // display current weather
-    getWeatherData();
     $('.cw-cityName').text(currentWeather.cityName);
     $('.cw-date').text(currentWeather.date);
     $('.weather-icon').attr('src', `http://openweathermap.org/img/wn/${currentWeather.icon}@2x.png`);
     $('.weather-description').text(currentWeather.description);
-    $('.temperature').text(currentWeather.temp+" &deg;F");
+    $('.temperature').html(currentWeather.temp + " &deg;F");
     $('.windSpeed').text(currentWeather.wind + " mph");
     $('.humidity').text(currentWeather.humidity + " %");
-
-    // display forecast data
-    getForecastData();
-    $('.forecast').empty();
-    for(let i = 0; i < forecastData.length; i++) {
-
-        let day = forecastData[i];
-        let cardTemplate = `<!-- col -->
-                            <div class="col-md m-1 card text-white bg-info mb-3" style="max-width: 18rem;">
-                                <div class="card-header text-center">${day.date}</div>
-                                <div class="card-body">
-                                    <img class="d-block text-center" src="http://openweathermap.org/img/wn/${day.icon}@2x.png" alt="icon">
-                                    <p class="card-text mt-3">${day.temp + " &deg;F"}</p>
-                                    <p class="card-text">${day.humidity + " %"}</p>
-                                </div>
-                            </div>`;
-        $('.forecast').append(cardTemplate);
-    }
-
-
+    $('.uvIndex').text(currentWeather.UVIndex);
 
 }
+
+// display forecast
+function displayForecastData(){
+  // display forecast data
+  $('.forecast').empty();
+  for(let i = 0; i < forecastData.length; i++) {
+      let day = forecastData[i];
+      let cardTemplate = `<!-- col -->
+                          <div class="col-md-3 m-1 card text-white mb-3" style="max-width: 18rem;">
+                              <div class="card-header text-center bg-primary">
+                                <span>${day.date}</span>
+                                <span class="d-block">${day.day.toUpperCase()}</span>
+                              </div>
+                              <div class="card-body bg-info">
+                                  <img class="" src="http://openweathermap.org/img/wn/${day.icon}@2x.png" alt="icon">
+                                  <p class="card-text mt-3">${day.temp} &deg;F</p>
+                                  <p class="card-text">${day.humidity + " %"}</p>
+                              </div>
+                          </div>`;
+      $('.forecast').append(cardTemplate);
+  }
+}
+
+/**
+ * helper function
+ */
+
+// get date string
+function dateInString(date) {
+    // convert to milisecon Epoch time
+    date = date * 1000; 
+    let dt = new Date(date); // Date(epoch seconds)
+    return dt.getMonth()+1 + "/" + dt.getDate() + "/" + dt.getFullYear();
+}
+
+// kelvin to Fahrenheit
+function kelvinToFahrenheit(kelvin) {
+    return Math.ceil(1.8 * (kelvin - 273) + 32);
+}
+
+/**
+ *  Event listener
+ */
+// add event listener for the form submit or click
+$('.search-form').on("submit", function (event) {
+
+    event.preventDefault();
+    $searchInput = $("#searchInput");
+    // check for empty string
+    if ($searchInput.val() === "") {
+      return;
+    }
+    currentCity = $searchInput.val();
+    $searchInput.val("");
+  
+    // get  weather data
+    getWeatherData();
+  
+  });
+
+  // event listener to the li elements, change the functionality to button
+  $('.city').on('click',function(event){
+
+    // this
+    $this = $(this);
+
+    currentCity = $this.text();
+
+    getWeatherData();
+  });
