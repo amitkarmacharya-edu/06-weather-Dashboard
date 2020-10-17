@@ -32,8 +32,6 @@ Weather Dashboard displays users the current weather data and 5-day forecast wea
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   SOFTWARE.
   
-  ### Author
-  Amit karmacharya
+  ### Author Info
   
-  work : Amitkarmacharya.work@gmail.com
-  edu : amit.education2018@gmail.com
+    LinkedIn - [Amit karmacharya](https://www.linkedin.com/in/amit-karmacharya-b344731ab/)
