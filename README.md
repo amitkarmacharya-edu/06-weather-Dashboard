@@ -34,4 +34,5 @@ Weather Dashboard displays users the current weather data and 5-day forecast wea
   
   ### Author Info
   
-    LinkedIn - [Amit karmacharya](https://www.linkedin.com/in/amit-karmacharya-b344731ab/)
+  LinkedIn :
+  [Amit karmacharya](https://www.linkedin.com/in/amit-karmacharya-b344731ab/)
